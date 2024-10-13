@@ -33,10 +33,10 @@ public final class KeuanganPribadi extends Keuangan {
         Transaksi transaksiBaru;
         if (jenis.equalsIgnoreCase("Pendapatan") || jenis.equalsIgnoreCase("Pemasukan")) {
             transaksiBaru = new Pemasukan(nominal, keterangan);
-            saldoSekarang += nominal; // Update saldo sekarang
+            saldoSekarang += nominal; 
         } else if (jenis.equalsIgnoreCase("Pengeluaran")) {
             transaksiBaru = new Pengeluaran(nominal, keterangan);
-            saldoSekarang -= nominal; // Update saldo sekarang
+            saldoSekarang -= nominal; 
         } else {
             System.out.println("Jenis transaksi tidak valid. Harap masukkan 'Pendapatan' atau 'Pengeluaran'.");
             return;
@@ -92,7 +92,7 @@ public final class KeuanganPribadi extends Keuangan {
                 System.out.print("Masukkan nominal uang baru: ");
                 double nominalBaru = scanner.nextDouble();
                 System.out.print("Masukkan jenis baru (Pendapatan/Pengeluaran): ");
-                scanner.nextLine(); // Membersihkan buffer
+                scanner.nextLine(); 
                 String jenisBaru = scanner.nextLine();
                 System.out.print("Masukkan keterangan baru: ");
                 String keteranganBaru = scanner.nextLine();
