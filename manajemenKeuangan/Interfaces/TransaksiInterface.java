@@ -8,11 +8,9 @@ package manajemenKeuangan.Interfaces;
  *
  * @author LENOVO
  */
-
 public interface TransaksiInterface {
     void tambahTransaksi(double nominal, String jenis, String keterangan);
     void lihatTransaksi();
     void hapusTransaksi(String keterangan);
     void updateTransaksi(String keterangan);
-}
-
+} 
