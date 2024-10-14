@@ -34,7 +34,7 @@ public class Main {
                         System.out.print("Masukkan nominal uang: ");
                         double nominal = scanner.nextDouble();
                         System.out.print("Masukkan jenis (Pendapatan/Pengeluaran): ");
-                        scanner.nextLine(); // Membersihkan buffer
+                        scanner.nextLine(); 
                         String jenis = scanner.nextLine();
                         System.out.print("Masukkan keterangan: ");
                         String keterangan = scanner.nextLine();
@@ -44,14 +44,14 @@ public class Main {
                     case 3 -> {
                         keuanganPribadi.lihatTransaksi();
                         System.out.print("Masukkan keterangan transaksi yang ingin dihapus: ");
-                        scanner.nextLine(); // Membersihkan buffer
+                        scanner.nextLine(); 
                         String keteranganHapus = scanner.nextLine();
                         keuanganPribadi.hapusTransaksi(keteranganHapus);
                     }
                     case 4 -> {
                         keuanganPribadi.lihatTransaksi();
                         System.out.print("Masukkan keterangan transaksi yang ingin diupdate: ");
-                        scanner.nextLine(); // Membersihkan buffer
+                        scanner.nextLine(); 
                         String keteranganUpdate = scanner.nextLine();
                         keuanganPribadi.updateTransaksi(keteranganUpdate);
                     }
