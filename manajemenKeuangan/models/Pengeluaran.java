@@ -1,18 +1,15 @@
 package manajemenKeuangan.models;
 
 public class Pengeluaran extends Transaksi {
-    private final String metodePembayaran;
+    private String metodePembayaran;
 
     public Pengeluaran(double jumlah, String keterangan, String metodePembayaran) {
         super(jumlah, keterangan);
+        setJenis("Pengeluaran"); 
         this.metodePembayaran = metodePembayaran;
-        this.jenis = "Pengeluaran";
     }
 
-    @Override
-    public void tampilkanTransaksi() {
-        System.out.println("Pengeluaran: Rp" + jumlah); 
-        System.out.println("Keterangan: " + keterangan); 
-        System.out.println("Metode: " + metodePembayaran);
+    public String getMetodePembayaran() {
+        return metodePembayaran;
     }
 }
