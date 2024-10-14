@@ -1,18 +1,15 @@
 package manajemenKeuangan.models;
 
 public class Pemasukan extends Transaksi {
-    private final String sumberPemasukan;
+    private String sumberPemasukan;
 
     public Pemasukan(double jumlah, String keterangan, String sumberPemasukan) {
         super(jumlah, keterangan);
+        setJenis("Pendapatan"); 
         this.sumberPemasukan = sumberPemasukan;
-        this.jenis = "Pemasukan";
     }
 
-    @Override
-     public void tampilkanTransaksi() {
-        System.out.println("Pemasukan: Rp" + jumlah); 
-        System.out.println("Keterangan: " + keterangan); 
-        System.out.println("Sumber: " + sumberPemasukan);
+    public String getSumberPemasukan() {
+        return sumberPemasukan;
     }
 }
