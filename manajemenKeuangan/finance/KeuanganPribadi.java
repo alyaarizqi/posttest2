@@ -55,8 +55,17 @@ public final class KeuanganPribadi extends Keuangan {
             System.out.println("Tidak ada transaksi.");
         } else {
             System.out.println("=== Daftar Transaksi ===");
-            for (Transaksi transaksi : daftarTransaksi) {
-                transaksi.tampilkanTransaksi();
+            System.out.println("-------------------------------");
+            for (Transaksi transaksi : daftarTransaksi) {               
+                System.out.println("Jumlah: Rp" + transaksi.getJumlah());
+                System.out.println("Jenis: " + transaksi.getJenis());
+                System.out.println("Keterangan: " + transaksi.getKeterangan());
+                if (transaksi instanceof Pemasukan pemasukan) {
+                    System.out.println("Sumber: " + pemasukan.getSumberPemasukan());
+                } else if (transaksi instanceof Pengeluaran pengeluaran) {
+                    System.out.println("Metode: " + pengeluaran.getMetodePembayaran());
+                }
+                System.out.println("-------------------------------");
             }
             System.out.println("Saldo Sekarang: Rp" + saldoSekarang);
         }
@@ -92,46 +101,22 @@ public final class KeuanganPribadi extends Keuangan {
 
         for (Transaksi transaksi : daftarTransaksi) {
             if (transaksi.getKeterangan().equalsIgnoreCase(keterangan)) {
-                ditemukan = true;
-
-                // Menampilkan informasi transaksi yang akan diupdate
-                transaksi.tampilkanTransaksi();
-
-                System.out.print("Masukkan jenis transaksi baru (Pendapatan/Pengeluaran): ");
-                String jenisBaru = scanner.nextLine();
-                double nominalBaru;
-
-                do {
-                    System.out.print("Masukkan nominal baru: ");
-                    while (!scanner.hasNextDouble()) {
-                        System.out.println("Masukkan nominal yang valid.");
-                        scanner.next(); 
-                    }
-                    nominalBaru = scanner.nextDouble();
-                    scanner.nextLine(); 
-                } while (nominalBaru <= 0); 
-
-                // Mengupdate transaksi dan saldo
-                if (jenisBaru.equalsIgnoreCase("Pendapatan") || jenisBaru.equalsIgnoreCase("Pemasukan")) {
-                    if (transaksi.getJenis().equalsIgnoreCase("Pengeluaran")) {
-                        saldoSekarang += transaksi.getJumlah(); // Mengurangi saldo dari pengeluaran
-                    }
-                    saldoSekarang += nominalBaru; // Menambahkan nominal baru
-                    transaksi.setJumlah(nominalBaru);
-                    transaksi.setJenis(jenisBaru);
-                } else if (jenisBaru.equalsIgnoreCase("Pengeluaran")) {
-                    if (transaksi.getJenis().equalsIgnoreCase("Pendapatan")) {
-                        saldoSekarang -= transaksi.getJumlah(); // Mengurangi saldo dari pendapatan
-                    }
-                    saldoSekarang -= nominalBaru; // Mengurangi nominal baru
-                    transaksi.setJumlah(nominalBaru);
-                    transaksi.setJenis(jenisBaru);
-                } else {
-                    System.out.println("Jenis transaksi tidak valid. Harap masukkan 'Pendapatan' atau 'Pengeluaran'.");
-                    return;
+                System.out.print("Masukkan nominal baru: ");
+                double nominalBaru = scanner.nextDouble();
+                scanner.nextLine(); 
+                
+                // Update saldo
+                if (transaksi.getJenis().equalsIgnoreCase("Pendapatan") || transaksi.getJenis().equalsIgnoreCase("Pemasukan")) {
+                    saldoSekarang -= transaksi.getJumlah();
+                    saldoSekarang += nominalBaru;
+                } else if (transaksi.getJenis().equalsIgnoreCase("Pengeluaran")) {
+                    saldoSekarang += transaksi.getJumlah();
+                    saldoSekarang -= nominalBaru;
                 }
-
-                System.out.println("Transaksi berhasil diupdate.");
+                
+                transaksi.setJumlah(nominalBaru); 
+                System.out.println("Transaksi berhasil diperbarui.");
+                ditemukan = true;
                 break;
             }
         }
