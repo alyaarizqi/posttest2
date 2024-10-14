@@ -1,24 +1,29 @@
 package manajemenKeuangan.models;
 
-public class Transaksi {
-    private double jumlah;
-    private String jenis;
-    private String keterangan;
+public abstract class Transaksi {
+    protected double jumlah;
+    protected String keterangan;
+    protected String jenis;
 
-     // Constructor
-    public Transaksi(double jumlah, String jenis, String keterangan) {
+    public Transaksi(double jumlah, String keterangan) {
         this.jumlah = jumlah;
-        this.jenis = jenis;
         this.keterangan = keterangan;
     }
 
-    // Getter dan Setter
     public double getJumlah() {
         return jumlah;
     }
 
     public void setJumlah(double jumlah) {
         this.jumlah = jumlah;
+    }
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
     }
 
     public String getJenis() {
@@ -29,19 +34,5 @@ public class Transaksi {
         this.jenis = jenis;
     }
 
-    public String getKeterangan() {
-        return keterangan;
-    }
-
-    public void setKeterangan(String keterangan) {
-        this.keterangan = keterangan;
-    }
-    
-    // Method untuk menampilkan transaksi
-    public void tampilkanTransaksi() {
-        System.out.println("Jumlah: Rp" + jumlah);
-        System.out.println("Jenis: " + jenis);
-        System.out.println("Keterangan: " + keterangan);
-        System.out.println("--------------------------"); 
-    }
+    public abstract void tampilkanTransaksi();
 }
