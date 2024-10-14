@@ -1,9 +1,9 @@
 package manajemenKeuangan.models;
 
-public abstract class Transaksi {
-    protected double jumlah;
-    protected String keterangan;
-    protected String jenis;
+public class Transaksi {
+    private double jumlah;
+    private String keterangan;
+    private String jenis; // "Pendapatan" atau "Pengeluaran"
 
     public Transaksi(double jumlah, String keterangan) {
         this.jumlah = jumlah;
@@ -22,10 +22,6 @@ public abstract class Transaksi {
         return keterangan;
     }
 
-    public void setKeterangan(String keterangan) {
-        this.keterangan = keterangan;
-    }
-
     public String getJenis() {
         return jenis;
     }
@@ -33,6 +29,4 @@ public abstract class Transaksi {
     public void setJenis(String jenis) {
         this.jenis = jenis;
     }
-
-    public abstract void tampilkanTransaksi();
 }
