@@ -6,18 +6,16 @@ import manajemenKeuangan.models.Pengeluaran;
 import java.util.Iterator;
 import java.util.Scanner;
 
-
 public final class KeuanganPribadi extends Keuangan {
-    
+
     public KeuanganPribadi(String pemilik, String mataUang, double saldoAwal) {
         super(pemilik, mataUang, saldoAwal);
     }
-    
+
     public static void tampilkanDeskripsiAplikasi() {
         System.out.println("Aplikasi Keuangan Pribadi");
     }
-    
-    // Implementasi method tampilkanInfo
+
     @Override
     public void tampilkanInfo() {
         System.out.println("=== Informasi Pemilik ===");
@@ -27,20 +25,26 @@ public final class KeuanganPribadi extends Keuangan {
         System.out.println("Saldo Sekarang: Rp" + getSaldoSekarang());
     }
 
-    // Implementasi method CRUD dari interface
     @Override
     public void tambahTransaksi(double nominal, String jenis, String keterangan) {
+        Scanner scanner = new Scanner(System.in);
         Transaksi transaksiBaru;
+
         if (jenis.equalsIgnoreCase("Pendapatan") || jenis.equalsIgnoreCase("Pemasukan")) {
-            transaksiBaru = new Pemasukan(nominal, keterangan);
-            saldoSekarang += nominal; 
+            System.out.print("Masukkan sumber pemasukan: ");
+            String sumberPemasukan = scanner.nextLine();
+            transaksiBaru = new Pemasukan(nominal, keterangan, sumberPemasukan);
+            saldoSekarang += nominal;
         } else if (jenis.equalsIgnoreCase("Pengeluaran")) {
-            transaksiBaru = new Pengeluaran(nominal, keterangan);
-            saldoSekarang -= nominal; 
+            System.out.print("Masukkan metode pembayaran: ");
+            String metodePembayaran = scanner.nextLine();
+            transaksiBaru = new Pengeluaran(nominal, keterangan, metodePembayaran);
+            saldoSekarang -= nominal;
         } else {
             System.out.println("Jenis transaksi tidak valid. Harap masukkan 'Pendapatan' atau 'Pengeluaran'.");
             return;
         }
+
         daftarTransaksi.add(transaksiBaru);
         System.out.println("Transaksi berhasil ditambahkan.");
     }
@@ -65,7 +69,6 @@ public final class KeuanganPribadi extends Keuangan {
         while (iterator.hasNext()) {
             Transaksi transaksi = iterator.next();
             if (transaksi.getKeterangan().equalsIgnoreCase(keterangan)) {
-                // Mengembalikan saldo berdasarkan jenis transaksi yang dihapus
                 if (transaksi.getJenis().equalsIgnoreCase("Pendapatan") || transaksi.getJenis().equalsIgnoreCase("Pemasukan")) {
                     saldoSekarang -= transaksi.getJumlah();
                 } else if (transaksi.getJenis().equalsIgnoreCase("Pengeluaran")) {
@@ -84,43 +87,55 @@ public final class KeuanganPribadi extends Keuangan {
 
     @Override
     public void updateTransaksi(String keterangan) {
+        Scanner scanner = new Scanner(System.in);
         boolean ditemukan = false;
+
         for (Transaksi transaksi : daftarTransaksi) {
             if (transaksi.getKeterangan().equalsIgnoreCase(keterangan)) {
-                Scanner scanner = new Scanner(System.in);
-    
-                System.out.print("Masukkan nominal uang baru: ");
-                double nominalBaru = scanner.nextDouble();
-                System.out.print("Masukkan jenis baru (Pendapatan/Pengeluaran): ");
-                scanner.nextLine(); 
-                String jenisBaru = scanner.nextLine();
-                System.out.print("Masukkan keterangan baru: ");
-                String keteranganBaru = scanner.nextLine();
-    
-                // Mengembalikan saldo sebelumnya
-                if (transaksi.getJenis().equalsIgnoreCase("Pendapatan") || transaksi.getJenis().equalsIgnoreCase("Pemasukan")) {
-                    saldoSekarang -= transaksi.getJumlah();
-                } else if (transaksi.getJenis().equalsIgnoreCase("Pengeluaran")) {
-                    saldoSekarang += transaksi.getJumlah();
-                }
-    
-                // Meng-update nilai transaksi
-                transaksi.setJumlah(nominalBaru);
-                transaksi.setJenis(jenisBaru);
-                transaksi.setKeterangan(keteranganBaru);
-    
-                // Meng-update saldo berdasarkan jenis transaksi baru
-                if (jenisBaru.equalsIgnoreCase("Pendapatan") || jenisBaru.equalsIgnoreCase("Pemasukan")) {
-                    saldoSekarang += nominalBaru;
-                } else if (jenisBaru.equalsIgnoreCase("Pengeluaran")) {
-                    saldoSekarang -= nominalBaru;
-                }
-    
-                System.out.println("Transaksi berhasil diupdate.");
                 ditemukan = true;
+
+                // Menampilkan informasi transaksi yang akan diupdate
+                transaksi.tampilkanTransaksi();
+
+                System.out.print("Masukkan jenis transaksi baru (Pendapatan/Pengeluaran): ");
+                String jenisBaru = scanner.nextLine();
+                double nominalBaru;
+
+                do {
+                    System.out.print("Masukkan nominal baru: ");
+                    while (!scanner.hasNextDouble()) {
+                        System.out.println("Masukkan nominal yang valid.");
+                        scanner.next(); 
+                    }
+                    nominalBaru = scanner.nextDouble();
+                    scanner.nextLine(); 
+                } while (nominalBaru <= 0); 
+
+                // Mengupdate transaksi dan saldo
+                if (jenisBaru.equalsIgnoreCase("Pendapatan") || jenisBaru.equalsIgnoreCase("Pemasukan")) {
+                    if (transaksi.getJenis().equalsIgnoreCase("Pengeluaran")) {
+                        saldoSekarang += transaksi.getJumlah(); // Mengurangi saldo dari pengeluaran
+                    }
+                    saldoSekarang += nominalBaru; // Menambahkan nominal baru
+                    transaksi.setJumlah(nominalBaru);
+                    transaksi.setJenis(jenisBaru);
+                } else if (jenisBaru.equalsIgnoreCase("Pengeluaran")) {
+                    if (transaksi.getJenis().equalsIgnoreCase("Pendapatan")) {
+                        saldoSekarang -= transaksi.getJumlah(); // Mengurangi saldo dari pendapatan
+                    }
+                    saldoSekarang -= nominalBaru; // Mengurangi nominal baru
+                    transaksi.setJumlah(nominalBaru);
+                    transaksi.setJenis(jenisBaru);
+                } else {
+                    System.out.println("Jenis transaksi tidak valid. Harap masukkan 'Pendapatan' atau 'Pengeluaran'.");
+                    return;
+                }
+
+                System.out.println("Transaksi berhasil diupdate.");
                 break;
             }
         }
+
         if (!ditemukan) {
             System.out.println("Transaksi tidak ditemukan.");
         }
